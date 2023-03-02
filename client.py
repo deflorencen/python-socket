@@ -12,3 +12,4 @@ print(f"SERVER MSG:\n\t{msg}")
 client.send("I'm understand".encode("utf-8"))
 
 print("Cliend is running.")
+print("Test third commit")
