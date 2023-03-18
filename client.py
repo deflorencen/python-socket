@@ -1,15 +1,15 @@
-from socket import *
+import socket
+import command
 
-client = socket(AF_INET, SOCK_STREAM)
+# CLIENT VARIABLE
+client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
-client.connect(("127.0.0.1", 7000))
+# CONNECTION OF THE CLIENT TO THE SERVER
+client.connect(("127.0.0.1", 12345))
 
-data = client.recv(1024)
-msg = data.decode("utf-8")
+server_message = command.get_message_from_server(client)
+print(server_message)
 
-print(f"SERVER MSG:\n\t{msg}")
-
-client.send("I'm understand".encode("utf-8"))
-
-print("Cliend is running.")
-print("Test third commit")
+# SENDING DATA TO THE SERVER FROM THE CLIENT
+message_to_server = "Wpisz wiadomosc dla servera:"
+client.sendall(message_to_server.encode('utf-8'))
