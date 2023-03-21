@@ -1,22 +1,22 @@
 import socket
 import command
 
-# SERVER VARIABLE
-server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as server:
+    server.bind(("127.0.0.1", 12345))
+    server.listen(0)
 
-# WE SHOW WHAT IP ADDRESS AND PORT WE WORK ON
-server.bind(('127.0.0.1', 12345))
+    print("\n\tSERVER IS WORKING...")
 
-# HOW MUCH A CONNECTED PERSON CAN ACCEPT OUR SERVER AT A TIME
-server.listen(0)
+    while True:
+        server, address = server.accept()
 
-# TO ACCEPT CONNECTED FROM THE CLIENT
-server, addr = server.accept()
-print(f"CONNECTED:\n{server}\n{addr}")
+        with server:
 
-command.send_to_client(server, "Hello, client!")
+            while True:
+                option = server.recv(1024).decode("utf-8")
 
-# RECEIVING MESSAGES FROM THE CLIENT TO THE SERVER
-client_request = server.recv(1024)
-message = client_request.decode('utf-8')
-print(f"USER MESSAGE:\n\t{message}")
+                if(option == "1"):
+                    command.create_user(server)
+
+                if not option:
+                    break
