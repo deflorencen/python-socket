@@ -28,4 +28,5 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as server:
                         command.payment_on_account(server)
 
                 if not option:
+                    print('Server is stoped') # My propose to add here print() with information, that server is stoped 
                     break
