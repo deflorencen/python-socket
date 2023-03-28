@@ -27,5 +27,6 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as server:
                 elif (option == "3"):
                         command.payment_on_account(server)
 
-                if not option:
+                if (option == "q"):
+                    print('Server is stoped')
                     break
