@@ -1,6 +1,8 @@
 import json
 from argon2 import PasswordHasher
 from argon2.exceptions import VerifyMismatchError
+import socket
+import threading
 
 
 # SENDING A MESSAGE TO THE CLIENT FROM SERVER
@@ -35,10 +37,10 @@ def hash_password(password) -> str:
     hash_password = ph.hash(password)
     return hash_password
 
-def check_password(password):
-    ph = PasswordHasher()
-    check = ph.verify(password, input())
-    pass
+# def check_password(password):
+#     ph = PasswordHasher()
+#     check = ph.verify(password, input())
+#     pass
 
 
 def create_user(server):
@@ -82,6 +84,7 @@ def payment_on_account(server):
     balance = user_info_json["Balance"]
     password = user_info_json["Password"]
 
+
     if float(balance) <= 0:
         send_request_to_client(server, "The amount cannot be negative or zero! ")
     else:
@@ -96,3 +99,41 @@ def payment_on_account(server):
 
     message_to_client = f"Kwota po operacji wynosi: {data['Balance']:.2f} PLN"
     send_request_to_client(server, message_to_client)
+
+def make_the_payment(server):
+    send_request_to_client(server, "\n\tPayment:\n")
+
+    user_info_json = get_from_client(server)
+    print("USER DATA:", 'First name: ' + user_info_json["First name"], 'Last name: ' + user_info_json["Last name"], 'Balance: ' + user_info_json["Balance"])
+
+    fname = user_info_json["First name"]
+    lname = user_info_json["Last name"]
+    get_balance = user_info_json["Balance"]
+    password = user_info_json["Password"]
+
+    with open(f'Users/{fname}_{lname}.json', 'r') as file_to_changing:
+        data = json.load(file_to_changing)
+
+    balance = data["Balance"]
+
+    if float(balance) < float(get_balance):
+        send_request_to_client(server, "Nie wystarcza środków")
+    elif float(balance) <= 0:
+        send_request_to_client(server, "The amount cannot be negative or zero! ")
+    else:
+        with open(f'Users/{fname}_{lname}.json', 'r') as file_to_changing:
+            data = json.load(file_to_changing)
+            ph = PasswordHasher()
+
+            if (ph.verify(data["Password"], password)):
+                data["Balance"] -= float(balance)
+                with open(f'Users/{fname}_{lname}.json', 'w') as file_to_changing:
+                    json.dump(data, file_to_changing)
+
+    message_to_client = f"Kwota po operacji wynosi: {data['Balance']:.2f} PLN"
+    send_request_to_client(server, message_to_client)
+
+def transfer_money_to_account(server):
+    send_request_to_client(server, "\n\tTransfer to another account:\n")
+    pass
+

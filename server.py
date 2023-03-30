@@ -1,7 +1,5 @@
 import socket
-
-from argon2.exceptions import InvalidHash
-
+import threading
 import command
 
 with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as server:
@@ -9,7 +7,6 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as server:
     server.listen(0)
 
     print("\n\tSERVER IS WORKING...")
-
     while True:
         server, address = server.accept()
 
@@ -25,7 +22,13 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as server:
                     command.check_account_status(server)
 
                 elif (option == "3"):
-                        command.payment_on_account(server)
+                    command.payment_on_account(server)
+
+                elif (option == "4"):
+                    command.make_the_payment(server)
+
+                elif (option == "5"):
+                    command.transfer_money_to_account(server)
 
                 if (option == "q"):
                     print('Server is stoped')

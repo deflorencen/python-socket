@@ -65,6 +65,22 @@ try:
                 password = input("Password:")
                 user = {"First name": fname, "Last name": lname, "Balance": balance, "Password": password}
 
+                data_to_changing = json.dumps(user)
+                command.send_request_to_server(client, data_to_changing)
+
+                server_message = command.get_message_from_server(client)
+                print(server_message)
+
+            elif (option == "4"):
+                command.send_request_to_server(client, "4")
+
+                print(command.get_message_from_server(client))
+
+                fname = input("First name:")
+                lname = input("Last name:")
+                balance = input("Sum to payment:")
+                password = input("Password:")
+                user = {"First name": fname, "Last name": lname, "Balance": balance, "Password": password}
 
                 data_to_changing = json.dumps(user)
                 command.send_request_to_server(client, data_to_changing)
@@ -72,10 +88,29 @@ try:
                 server_message = command.get_message_from_server(client)
                 print(server_message)
 
+            elif (option == "5"):
+                command.send_request_to_server(client, "5")
+
+                print(command.get_message_from_server(client))
+
+                owner_fname = input("First name:")
+                owner_lname = input("Last name:")
+                money_to_transfer = input("Money to transfer: ")
+                password = input("Password:")
+                print("Transfer to..")
+                fname_t = input("First name:")
+                lname_t = input("Last name:")
+                users = {"First name": owner_fname, "Last name": owner_lname, "Password": password, "Money to transfe": money_to_transfer,}
+
+                data_to_changing = json.dumps(users)
+                command.send_request_to_server(client, data_to_changing)
+
+
+
+
             elif(option == "q"):
                 command.send_request_to_server(client, "q")
                 break
-
 
 
 
